@@ -2,7 +2,8 @@
 
 ## Project overview
 
-The objective of this project is to build an analytics database for agriculture-related data in the United States. 
+The objective of this project is to build an analytics database for
+agriculture-related data in the United States.
 
 This database will be helpful to find answers for questions such as:
 
@@ -14,9 +15,9 @@ This database will be helpful to find answers for questions such as:
 
 ## Data sources
 
-- Country-level annual production of various crops by FAO 
+- Country-level annual production of various crops by FAO
     - CSV fomat
-    - >2 million lines
+    - More than 2 million lines
     - Source: http://www.fao.org/faostat/en/#data/QC
 
 - Definition of flags of FAO crop production data
@@ -36,15 +37,19 @@ This database will be helpful to find answers for questions such as:
 
 ![ER Diagram](capstone_project_er_diagram.jpeg)
 
-The four tables on the left contain data that are loaded from data files in S3. The six tables on the right are the analytics
-tables. The `temperature`, `agri_chem_prod_index`, `item`, `element`, and `flag` tables are the dimension tables, while the 
-`crop_production` table is the fact table. This data model allows us to easily find answers to the questions above.
+The four tables on the left contain data that are loaded from data files in S3.
+The six tables on the right are the analytics tables. The `temperature`,
+`agri_chem_prod_index`, `item`, `element`, and `flag` tables are the dimension
+tables, while the `crop_production` table is the fact table. This data model
+allows us to easily find answers to the questions above.
 
-`DISTSTYLE` was set to `all` for the `agri_chem_prod_index`, `item`, `element`, and `flag` tables because they are relatively 
-small. Doing so will improve the speed of JOIN operations.
+`DISTSTYLE` was set to `all` for the `agri_chem_prod_index`, `item`, `element`,
+and `flag` tables because they are relatively small. Doing so will improve the
+speed of JOIN operations.
 
-In tables that have `year` column, `year` column is used as the sort key to improve the performance of year-based searches, 
-which is likely to be done frequently by the database users.
+In tables that have `year` column, `year` column is used as the sort key to
+improve the performance of year-based searches, which is likely to be done
+frequently by the database users.
 
 ## Data dictionary
 
@@ -59,7 +64,7 @@ which is likely to be done frequently by the database users.
     - `units`: unit of measurement
     - `year`: year
     - `value`: annual agricultural chemical production index
-    - `last_historical_perdiod`: the latest year with historical data
+    - `last_historical_period`: the latest year with historical data
     - `last_updated`: the time the data was last updated
 
 - `item`
@@ -83,7 +88,6 @@ which is likely to be done frequently by the database users.
     - `flag_code`: foreign key to join with `flag` table
     - `temperature_id`: foreign key to join with `temperature` table
     - `chem_production_id`: foreign key to join with `agri_chem_prod_index` table
-    
 
 ## Steps taken / data pipeline
 
@@ -106,17 +110,21 @@ which is likely to be done frequently by the database users.
 
 ## Choice of technologies
 
-Airflow was chosen as the pipeline tool because it provides an easy way to manage ETL tasks and create workflows using DAGs. 
-Data pipelines can be created by organising individual tasks and their dependencies. Schedules can then be set up to execute 
-the pipelines automatically. In addition, alert can also be set up to inform the pipeline creator about any failure of DAG 
-runs.
+Airflow was chosen as the pipeline tool because it provides an easy way to
+manage ETL tasks and create workflows using DAGs. Data pipelines can be created
+by organising individual tasks and their dependencies. Schedules can then be set
+up to execute the pipelines automatically. In addition, alert can also be set
+up to inform the pipeline creator about any failure of DAG runs.
 
-S3 was used to store raw data files because it provides a low-cost storage space and allows us to store a large amount of data
-and not worry about storage limit as the data increases.
+S3 was used to store raw data files because it provides a low-cost storage
+space and allows us to store a large amount of data and not worry about storage
+limit as the data increases.
 
-Redshift was selected as the data warehouse tool because it can be easily scaled according to the data size and number of users. 
-The data also can be queried using SQL-based queries, which makes it user-friendly for people who have background in SQL. In 
-addition, it has built-in capability to load data directly from S3, allowing easy set-up of data transfers from S3 to Redshift.
+Redshift was selected as the data warehouse tool because it can be easily
+scaled according to the data size and number of users. The data also can be
+queried using SQL-based queries, which makes it user-friendly for people who
+have background in SQL. In addition, it has built-in capability to load data
+directly from S3, allowing easy set-up of data transfers from S3 to Redshift.
 
 ## Scenarios
 
