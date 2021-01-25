@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__
+
+logs
+airflow-webserver.pid
+airflow.cfg
+airflow.db
+unittests.cfg
+
+s3_hook_sample_dag.py
